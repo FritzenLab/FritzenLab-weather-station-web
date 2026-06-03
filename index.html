@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>FritzenLab Weather Station</title>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+body{
+    font-family: Arial, sans-serif;
+    margin:0;
+    background:#f4f4f4;
+}
+
+header{
+    background:#222;
+    color:white;
+    padding:15px;
+    text-align:center;
+}
+
+.container{
+    width:95%;
+    max-width:1400px;
+    margin:auto;
+}
+
+.cards{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+    gap:15px;
+    margin:20px 0;
+}
+
+.card{
+    background:white;
+    border-radius:10px;
+    padding:20px;
+    text-align:center;
+    box-shadow:0 2px 5px rgba(0,0,0,.15);
+}
+
+.card h2{
+    margin:0;
+    font-size:1rem;
+}
+
+.card .value{
+    font-size:2rem;
+    margin-top:10px;
+    font-weight:bold;
+}
+
+.chart-container{
+    background:white;
+    margin-bottom:25px;
+    padding:15px;
+    border-radius:10px;
+    box-shadow:0 2px 5px rgba(0,0,0,.15);
+}
+
+canvas{
+    max-height:350px;
+}
+
+.footer{
+    text-align:center;
+    margin:20px;
+    color:#666;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>FritzenLab Weather Station</h1>
+    <div id="lastUpdate">Loading...</div>
+</header>
+
+<div class="container">
+
+<div class="cards">
+
+<div class="card">
+<h2>Temperature</h2>
+<div id="tempNow" class="value">--</div>
+</div>
+
+<div class="card">
+<h2>Humidity</h2>
+<div id="humNow" class="value">--</div>
+</div>
+
+<div class="card">
+<h2>LDR</h2>
+<div id="ldrNow" class="value">--</div>
+</div>
+
+<div class="card">
+<h2>TVOC</h2>
+<div id="tvocNow" class="value">--</div>
+</div>
+
+</div>
+
+<div class="chart-container">
+<h2>Temperature (24 Hours)</h2>
+<canvas id="tempChart"></canvas>
+</div>
+
+<div class="chart-container">
+<h2>Humidity (24 Hours)</h2>
+<canvas id="humChart"></canvas>
+</div>
+
+<div class="chart-container">
+<h2>LDR (24 Hours)</h2>
+<canvas id="ldrChart"></canvas>
+</div>
+
+<div class="chart-container">
+<h2>TVOC (24 Hours)</h2>
+<canvas id="tvocChart"></canvas>
+</div>
+
+</div>
+
+<div class="footer">
+FritzenLab Weather Station
+</div>
+
+<script type="module">
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyD7lwDV-wizSDwlHR7ye2g_NlOgVMmdzW4",
+  authDomain: "fritzenlabweather.firebaseapp.com",
+  databaseURL: "https://fritzenlabweather-default-rtdb.firebaseio.com",
+  projectId: "fritzenlabweather",
+  storageBucket: "fritzenlabweather.firebasestorage.app",
+  messagingSenderId: "663871098858",
+  appId: "1:663871098858:web:6baf040a18e1733c3dac93",
+  measurementId: "G-ENSMBE7RK4"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+
+let tempChart;
+let humChart;
+let ldrChart;
+let tvocChart;
+
+function createChart(canvasId,label,data,labels)
+{
+    const ctx=document.getElementById(canvasId);
+
+    return new Chart(ctx,{
+        type:'line',
+        data:{
+            labels:labels,
+            datasets:[{
+                label:label,
+                data:data,
+                tension:0.25,
+                fill:false
+            }]
+        },
+        options:{
+            responsive:true,
+            maintainAspectRatio:false,
+            scales:{
+                x:{
+                    ticks:{
+                        maxTicksLimit:10
+                    }
+                }
+            }
+        }
+    });
+}
+
+async function loadWeather()
+{
+    try{
+
+        const snapshot = await get(ref(db,'weather'));
+
+        if(!snapshot.exists())
+        {
+            console.log("No data");
+            return;
+        }
+
+        const data = snapshot.val();
+
+        const now = Date.now()/1000;
+        const cutoff = now - (24*60*60);
+
+        let rows=[];
+
+        Object.keys(data).forEach(key=>{
+
+            const item=data[key];
+
+            if(item.timestamp >= cutoff)
+            {
+                rows.push(item);
+            }
+
+        });
+
+        rows.sort((a,b)=>a.timestamp-b.timestamp);
+
+        if(rows.length===0)
+            return;
+
+        const latest = rows[rows.length-1];
+
+        document.getElementById("tempNow").innerHTML =
+            latest.temp.toFixed(1)+" °C";
+
+        document.getElementById("humNow").innerHTML =
+            latest.hum.toFixed(1)+" %";
+
+        document.getElementById("ldrNow").innerHTML =
+            latest.ldr.toFixed(1)+" %";
+
+        document.getElementById("tvocNow").innerHTML =
+            latest.tvoc.toFixed(0);
+
+        document.getElementById("lastUpdate").innerHTML =
+            "Last update: "+
+            new Date(latest.timestamp*1000).toLocaleString();
+
+        const labels=[];
+        const tempData=[];
+        const humData=[];
+        const ldrData=[];
+        const tvocData=[];
+
+        rows.forEach(r=>{
+
+            labels.push(
+                new Date(r.timestamp*1000)
+                .toLocaleTimeString([],{
+                    hour:'2-digit',
+                    minute:'2-digit'
+                })
+            );
+
+            tempData.push(r.temp);
+            humData.push(r.hum);
+            ldrData.push(r.ldr);
+            tvocData.push(r.tvoc);
+
+        });
+
+        if(tempChart) tempChart.destroy();
+        if(humChart) humChart.destroy();
+        if(ldrChart) ldrChart.destroy();
+        if(tvocChart) tvocChart.destroy();
+
+        tempChart =
+            createChart(
+                "tempChart",
+                "Temperature °C",
+                tempData,
+                labels
+            );
+
+        humChart =
+            createChart(
+                "humChart",
+                "Humidity %",
+                humData,
+                labels
+            );
+
+        ldrChart =
+            createChart(
+                "ldrChart",
+                "LDR %",
+                ldrData,
+                labels
+            );
+
+        tvocChart =
+            createChart(
+                "tvocChart",
+                "TVOC",
+                tvocData,
+                labels
+            );
+
+    }
+    catch(err)
+    {
+        console.error(err);
+    }
+}
+
+loadWeather();
+
+setInterval(loadWeather,60000);
+
+</script>
+
+</body>
+</html>
