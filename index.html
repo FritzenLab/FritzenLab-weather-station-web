@@ -136,7 +136,7 @@ FritzenLab Weather Station
 <script type="module">
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+import { getDatabase, ref, get, query, orderByKey, startAt } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyD7lwDV-wizSDwlHR7ye2g_NlOgVMmdzW4",
@@ -185,12 +185,22 @@ function createChart(canvasId,label,data,labels)
         }
     });
 }
-
+// comment
 async function loadWeather()
 {
     try{
 
-        const snapshot = await get(ref(db,'weather'));
+        const now = Math.floor(Date.now() / 1000);
+
+        const cutoff48h = now - (48 * 60 * 60);
+
+        const weatherQuery = query(
+            ref(db,'weather'),
+            orderByKey(),
+            startAt(String(cutoff48h))
+        );
+
+        const snapshot = await get(weatherQuery);
 
         if(!snapshot.exists())
         {
@@ -200,7 +210,6 @@ async function loadWeather()
 
         const data = snapshot.val();
 
-        const now = Date.now()/1000;
         const cutoff = now - (24*60*60);
 
         let rows=[];
@@ -308,7 +317,7 @@ async function loadWeather()
 
 loadWeather();
 
-setInterval(loadWeather,60000);
+setInterval(loadWeather,300000);
 
 </script>
 
