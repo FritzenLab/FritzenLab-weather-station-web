@@ -1,10 +1,11 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>FritzenLab Weather Station</title>
+<title>FritzenLab Weather Stations</title>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
@@ -26,6 +27,18 @@ header{
     width:95%;
     max-width:1400px;
     margin:auto;
+}
+
+.station{
+    margin-top:30px;
+}
+
+.station-title{
+    background:#333;
+    color:white;
+    padding:12px 15px;
+    border-radius:10px 10px 0 0;
+    margin:0;
 }
 
 .cards{
@@ -68,103 +81,210 @@ canvas{
 
 .footer{
     text-align:center;
-    margin:20px;
+    margin:30px 20px;
     color:#666;
 }
 </style>
+
 </head>
 
 <body>
 
 <header>
-    <h1>FritzenLab Weather Station</h1>
+    <h1>FritzenLab Weather Stations</h1>
     <div id="lastUpdate">Loading...</div>
 </header>
 
 <div class="container">
 
+<!-- ========================================================= -->
+
+<!-- ORIGINAL WEATHER STATION                                  -->
+
+<!-- ========================================================= -->
+
+<div class="station">
+
+<h2 class="station-title">Weather Station 1</h2>
+
 <div class="cards">
 
 <div class="card">
 <h2>Temperature</h2>
-<div id="tempNow" class="value">--</div>
+<div id="tempNow1" class="value">--</div>
 </div>
 
 <div class="card">
 <h2>Humidity</h2>
-<div id="humNow" class="value">--</div>
+<div id="humNow1" class="value">--</div>
 </div>
 
 <div class="card">
 <h2>LDR</h2>
-<div id="ldrNow" class="value">--</div>
+<div id="ldrNow1" class="value">--</div>
 </div>
 
 <div class="card">
 <h2>TVOC</h2>
-<div id="tvocNow" class="value">--</div>
+<div id="tvocNow1" class="value">--</div>
 </div>
 
 </div>
 
 <div class="chart-container">
 <h2>Temperature (24 Hours)</h2>
-<canvas id="tempChart"></canvas>
+<canvas id="tempChart1"></canvas>
 </div>
 
 <div class="chart-container">
 <h2>Humidity (24 Hours)</h2>
-<canvas id="humChart"></canvas>
+<canvas id="humChart1"></canvas>
 </div>
 
 <div class="chart-container">
 <h2>LDR (24 Hours)</h2>
-<canvas id="ldrChart"></canvas>
+<canvas id="ldrChart1"></canvas>
 </div>
 
 <div class="chart-container">
 <h2>TVOC (24 Hours)</h2>
-<canvas id="tvocChart"></canvas>
+<canvas id="tvocChart1"></canvas>
+</div>
+
+</div>
+
+<!-- ========================================================= -->
+
+<!-- SECOND WEATHER STATION                                    -->
+
+<!-- ========================================================= -->
+
+<div class="station">
+
+<h2 class="station-title">Weather Station 2</h2>
+
+<div class="cards">
+
+<div class="card">
+<h2>Temperature</h2>
+<div id="tempNow2" class="value">--</div>
+</div>
+
+<div class="card">
+<h2>Humidity</h2>
+<div id="humNow2" class="value">--</div>
+</div>
+
+<div class="card">
+<h2>Pressure</h2>
+<div id="pressureNow2" class="value">--</div>
+</div>
+
+<div class="card">
+<h2>ENS160 TVOC</h2>
+<div id="ens160Now2" class="value">--</div>
+</div>
+
+<div class="card">
+<h2>AGS10 TVOC</h2>
+<div id="ags10Now2" class="value">--</div>
+</div>
+
+</div>
+
+<div class="chart-container">
+<h2>Temperature (24 Hours)</h2>
+<canvas id="tempChart2"></canvas>
+</div>
+
+<div class="chart-container">
+<h2>Humidity (24 Hours)</h2>
+<canvas id="humChart2"></canvas>
+</div>
+
+<div class="chart-container">
+<h2>Pressure (24 Hours)</h2>
+<canvas id="pressureChart2"></canvas>
+</div>
+
+<div class="chart-container">
+<h2>ENS160 TVOC (24 Hours)</h2>
+<canvas id="ens160Chart2"></canvas>
+</div>
+
+<div class="chart-container">
+<h2>AGS10 TVOC (24 Hours)</h2>
+<canvas id="ags10Chart2"></canvas>
+</div>
+
 </div>
 
 </div>
 
 <div class="footer">
-FritzenLab Weather Station
+FritzenLab Weather Stations
 </div>
 
 <script type="module">
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getDatabase, ref, get, query, orderByKey, startAt } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+import {
+    getDatabase,
+    ref,
+    get,
+    query,
+    orderByKey,
+    startAt
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
 
 const firebaseConfig = {
-  apiKey: "AIzaSyD7lwDV-wizSDwlHR7ye2g_NlOgVMmdzW4",
-  authDomain: "fritzenlabweather.firebaseapp.com",
-  databaseURL: "https://fritzenlabweather-default-rtdb.firebaseio.com",
-  projectId: "fritzenlabweather",
-  storageBucket: "fritzenlabweather.firebasestorage.app",
-  messagingSenderId: "663871098858",
-  appId: "1:663871098858:web:6baf040a18e1733c3dac93",
-  measurementId: "G-ENSMBE7RK4"
+    apiKey: "AIzaSyD7lwDV-wizSDwlHR7ye2g_NlOgVMmdzW4",
+    authDomain: "fritzenlabweather.firebaseapp.com",
+    databaseURL: "https://fritzenlabweather-default-rtdb.firebaseio.com",
+    projectId: "fritzenlabweather",
+    storageBucket: "fritzenlabweather.firebasestorage.app",
+    messagingSenderId: "663871098858",
+    appId: "1:663871098858:web:6baf040a18e1733c3dac93",
+    measurementId: "G-ENSMBE7RK4"
 };
+
 
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
-let tempChart;
-let humChart;
-let ldrChart;
-let tvocChart;
+
+/* ========================================================= */
+/* CHART VARIABLES                                            */
+/* ========================================================= */
+
+let tempChart1;
+let humChart1;
+let ldrChart1;
+let tvocChart1;
+
+let tempChart2;
+let humChart2;
+let pressureChart2;
+let ens160Chart2;
+let ags10Chart2;
+
+
+/* ========================================================= */
+/* CREATE CHART                                               */
+/* ========================================================= */
 
 function createChart(canvasId,label,data,labels)
 {
-    const ctx=document.getElementById(canvasId);
+    const ctx = document.getElementById(canvasId);
 
     return new Chart(ctx,{
         type:'line',
+
         data:{
             labels:labels,
+
             datasets:[{
                 label:label,
                 data:data,
@@ -172,9 +292,11 @@ function createChart(canvasId,label,data,labels)
                 fill:false
             }]
         },
+
         options:{
             responsive:true,
             maintainAspectRatio:false,
+
             scales:{
                 x:{
                     ticks:{
@@ -185,8 +307,14 @@ function createChart(canvasId,label,data,labels)
         }
     });
 }
-// comment
-async function loadWeather()
+
+
+/* ========================================================= */
+/* WEATHER STATION 1                                          */
+/* Firebase path: /weather                                  */
+/* ========================================================= */
+
+async function loadWeather1()
 {
     try{
 
@@ -204,19 +332,19 @@ async function loadWeather()
 
         if(!snapshot.exists())
         {
-            console.log("No data");
+            console.log("No data from Weather Station 1");
             return;
         }
 
         const data = snapshot.val();
 
-        const cutoff = now - (24*60*60);
+        const cutoff = now - (24 * 60 * 60);
 
-        let rows=[];
+        let rows = [];
 
-        Object.keys(data).forEach(key=>{
+        Object.keys(data).forEach(key => {
 
-            const item=data[key];
+            const item = data[key];
 
             if(item.timestamp >= cutoff)
             {
@@ -225,39 +353,47 @@ async function loadWeather()
 
         });
 
-        rows.sort((a,b)=>a.timestamp-b.timestamp);
+        rows.sort((a,b) => a.timestamp - b.timestamp);
 
-        if(rows.length===0)
+        if(rows.length === 0)
             return;
 
-        const latest = rows[rows.length-1];
+        const latest = rows[rows.length - 1];
 
-        document.getElementById("tempNow").innerHTML =
-            latest.temp.toFixed(1)+" °C";
 
-        document.getElementById("humNow").innerHTML =
-            latest.hum.toFixed(1)+" %";
+        /* Current values */
 
-        document.getElementById("ldrNow").innerHTML =
-            latest.ldr.toFixed(1)+" %";
+        document.getElementById("tempNow1").innerHTML =
+            latest.temp.toFixed(1) + " °C";
 
-        document.getElementById("tvocNow").innerHTML =
+        document.getElementById("humNow1").innerHTML =
+            latest.hum.toFixed(1) + " %";
+
+        document.getElementById("ldrNow1").innerHTML =
+            latest.ldr.toFixed(1) + " %";
+
+        document.getElementById("tvocNow1").innerHTML =
             latest.tvoc.toFixed(0);
 
+
         document.getElementById("lastUpdate").innerHTML =
-            "Last update: "+
-            new Date(latest.timestamp*1000).toLocaleString();
+            "Station 1 last update: " +
+            new Date(latest.timestamp * 1000).toLocaleString();
 
-        const labels=[];
-        const tempData=[];
-        const humData=[];
-        const ldrData=[];
-        const tvocData=[];
 
-        rows.forEach(r=>{
+        /* Chart data */
+
+        const labels = [];
+        const tempData = [];
+        const humData = [];
+        const ldrData = [];
+        const tvocData = [];
+
+
+        rows.forEach(r => {
 
             labels.push(
-                new Date(r.timestamp*1000)
+                new Date(r.timestamp * 1000)
                 .toLocaleTimeString([],{
                     hour:'2-digit',
                     minute:'2-digit'
@@ -271,38 +407,44 @@ async function loadWeather()
 
         });
 
-        if(tempChart) tempChart.destroy();
-        if(humChart) humChart.destroy();
-        if(ldrChart) ldrChart.destroy();
-        if(tvocChart) tvocChart.destroy();
 
-        tempChart =
+        /* Destroy old charts */
+
+        if(tempChart1) tempChart1.destroy();
+        if(humChart1) humChart1.destroy();
+        if(ldrChart1) ldrChart1.destroy();
+        if(tvocChart1) tvocChart1.destroy();
+
+
+        /* Create charts */
+
+        tempChart1 =
             createChart(
-                "tempChart",
+                "tempChart1",
                 "Temperature °C",
                 tempData,
                 labels
             );
 
-        humChart =
+        humChart1 =
             createChart(
-                "humChart",
+                "humChart1",
                 "Humidity %",
                 humData,
                 labels
             );
 
-        ldrChart =
+        ldrChart1 =
             createChart(
-                "ldrChart",
+                "ldrChart1",
                 "LDR %",
                 ldrData,
                 labels
             );
 
-        tvocChart =
+        tvocChart1 =
             createChart(
-                "tvocChart",
+                "tvocChart1",
                 "TVOC",
                 tvocData,
                 labels
@@ -311,11 +453,189 @@ async function loadWeather()
     }
     catch(err)
     {
-        console.error(err);
+        console.error("Weather Station 1 error:", err);
     }
 }
 
+
+/* ========================================================= */
+/* WEATHER STATION 2                                          */
+/* Firebase path: /weather2                                 */
+/* ========================================================= */
+
+async function loadWeather2()
+{
+    try{
+
+        const now = Math.floor(Date.now() / 1000);
+
+        const cutoff48h = now - (48 * 60 * 60);
+
+        const weatherQuery = query(
+            ref(db,'weather2'),
+            orderByKey(),
+            startAt(String(cutoff48h))
+        );
+
+        const snapshot = await get(weatherQuery);
+
+        if(!snapshot.exists())
+        {
+            console.log("No data from Weather Station 2");
+            return;
+        }
+
+        const data = snapshot.val();
+
+        const cutoff = now - (24 * 60 * 60);
+
+        let rows = [];
+
+        Object.keys(data).forEach(key => {
+
+            const item = data[key];
+
+            if(item.timestamp >= cutoff)
+            {
+                rows.push(item);
+            }
+
+        });
+
+        rows.sort((a,b) => a.timestamp - b.timestamp);
+
+        if(rows.length === 0)
+            return;
+
+        const latest = rows[rows.length - 1];
+
+
+        /* Current values */
+
+        document.getElementById("tempNow2").innerHTML =
+            latest.temp.toFixed(1) + " °C";
+
+        document.getElementById("humNow2").innerHTML =
+            latest.hum.toFixed(1) + " %";
+
+        document.getElementById("pressureNow2").innerHTML =
+            latest.pressure.toFixed(1) + " hPa";
+
+        document.getElementById("ens160Now2").innerHTML =
+            latest["tvoc ens160"].toFixed(0) + " ppb";
+
+        document.getElementById("ags10Now2").innerHTML =
+            latest["tvoc ags10"].toFixed(0) + " ppb";
+
+
+        /* Chart data */
+
+        const labels = [];
+        const tempData = [];
+        const humData = [];
+        const pressureData = [];
+        const ens160Data = [];
+        const ags10Data = [];
+
+
+        rows.forEach(r => {
+
+            labels.push(
+                new Date(r.timestamp * 1000)
+                .toLocaleTimeString([],{
+                    hour:'2-digit',
+                    minute:'2-digit'
+                })
+            );
+
+            tempData.push(r.temp);
+            humData.push(r.hum);
+            pressureData.push(r.pressure);
+            ens160Data.push(r["tvoc ens160"]);
+            ags10Data.push(r["tvoc ags10"]);
+
+        });
+
+
+        /* Destroy old charts */
+
+        if(tempChart2) tempChart2.destroy();
+        if(humChart2) humChart2.destroy();
+        if(pressureChart2) pressureChart2.destroy();
+        if(ens160Chart2) ens160Chart2.destroy();
+        if(ags10Chart2) ags10Chart2.destroy();
+
+
+        /* Create charts */
+
+        tempChart2 =
+            createChart(
+                "tempChart2",
+                "Temperature °C",
+                tempData,
+                labels
+            );
+
+        humChart2 =
+            createChart(
+                "humChart2",
+                "Humidity %",
+                humData,
+                labels
+            );
+
+        pressureChart2 =
+            createChart(
+                "pressureChart2",
+                "Pressure hPa",
+                pressureData,
+                labels
+            );
+
+        ens160Chart2 =
+            createChart(
+                "ens160Chart2",
+                "ENS160 TVOC ppb",
+                ens160Data,
+                labels
+            );
+
+        ags10Chart2 =
+            createChart(
+                "ags10Chart2",
+                "AGS10 TVOC ppb",
+                ags10Data,
+                labels
+            );
+
+
+    }
+    catch(err)
+    {
+        console.error("Weather Station 2 error:", err);
+    }
+}
+
+
+/* ========================================================= */
+/* LOAD BOTH STATIONS                                         */
+/* ========================================================= */
+
+async function loadWeather()
+{
+    await Promise.all([
+        loadWeather1(),
+        loadWeather2()
+    ]);
+}
+
+
+/* Initial load */
+
 loadWeather();
+
+
+/* Update every 5 minutes */
 
 setInterval(loadWeather,300000);
 
