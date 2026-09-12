@@ -181,8 +181,8 @@ canvas{
 </div>
 
 <div class="card">
-<h2>ENS160 TVOC</h2>
-<div id="ens160Now2" class="value">--</div>
+<h2>Resistance</h2>
+<div id="resistanceNow2" class="value">--</div>
 </div>
 
 <div class="card">
@@ -208,8 +208,8 @@ canvas{
 </div>
 
 <div class="chart-container">
-<h2>ENS160 TVOC (24 Hours)</h2>
-<canvas id="ens160Chart2"></canvas>
+<h2>Resistance (24 Hours)</h2>
+<canvas id="resistanceChart2"></canvas>
 </div>
 
 <div class="chart-container">
@@ -267,7 +267,7 @@ let tvocChart1;
 let tempChart2;
 let humChart2;
 let pressureChart2;
-let ens160Chart2;
+let resistanceChart2;
 let ags10Chart2;
 
 
@@ -521,8 +521,8 @@ async function loadWeather2()
         document.getElementById("pressureNow2").innerHTML =
             latest.pressure.toFixed(1) + " hPa";
 
-        document.getElementById("ens160Now2").innerHTML =
-            latest["tvoc ens160"].toFixed(0) + " ppb";
+        document.getElementById("resistanceNow2").innerHTML =
+            latest["BME680 resistance"].toFixed(0) + " Ohm";
 
         document.getElementById("ags10Now2").innerHTML =
             latest["tvoc ags10"].toFixed(0) + " ppb";
@@ -534,7 +534,7 @@ async function loadWeather2()
         const tempData = [];
         const humData = [];
         const pressureData = [];
-        const ens160Data = [];
+        const bme680Data = [];
         const ags10Data = [];
 
 
@@ -551,7 +551,7 @@ async function loadWeather2()
             tempData.push(r.temp);
             humData.push(r.hum);
             pressureData.push(r.pressure);
-            ens160Data.push(r["tvoc ens160"]);
+            bme680Data.push(r["BME680 resistance"]);
             ags10Data.push(r["tvoc ags10"]);
 
         });
@@ -562,7 +562,7 @@ async function loadWeather2()
         if(tempChart2) tempChart2.destroy();
         if(humChart2) humChart2.destroy();
         if(pressureChart2) pressureChart2.destroy();
-        if(ens160Chart2) ens160Chart2.destroy();
+        if(resistanceChart2) resistanceChart2.destroy();
         if(ags10Chart2) ags10Chart2.destroy();
 
 
@@ -592,11 +592,11 @@ async function loadWeather2()
                 labels
             );
 
-        ens160Chart2 =
+        resistanceChart2 =
             createChart(
-                "ens160Chart2",
-                "ENS160 TVOC ppb",
-                ens160Data,
+                "resistanceChart2",
+                "BME680 air quality",
+                bme680Data,
                 labels
             );
 
