@@ -1,8 +1,12 @@
+```html
 <!DOCTYPE html>
 
 <html lang="en">
+
 <head>
+
 <meta charset="UTF-8">
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>FritzenLab Weather Stations</title>
@@ -10,8 +14,9 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <style>
+
 body{
-    font-family: Arial, sans-serif;
+    font-family:Arial,sans-serif;
     margin:0;
     background:#f4f4f4;
 }
@@ -84,191 +89,213 @@ canvas{
     margin:30px 20px;
     color:#666;
 }
+
 </style>
 
 </head>
 
+
 <body>
 
+
 <header>
-    <h1>FritzenLab Weather Stations</h1>
-    <div id="lastUpdate">Loading...</div>
+
+<h1>FritzenLab Weather Stations</h1>
+
+<div id="lastUpdate">Loading...</div>
+
 </header>
+
 
 <div class="container">
 
-<!-- ========================================================= -->
-
-<!-- ORIGINAL WEATHER STATION                                  -->
 
 <!-- ========================================================= -->
-
-<div class="station">
-
-<h2 class="station-title">Weather Station 1</h2>
-
-<div class="cards">
-
-<div class="card">
-<h2>Temperature</h2>
-<div id="tempNow1" class="value">--</div>
-</div>
-
-<div class="card">
-<h2>Humidity</h2>
-<div id="humNow1" class="value">--</div>
-</div>
-
-<div class="card">
-<h2>LDR</h2>
-<div id="ldrNow1" class="value">--</div>
-</div>
-
-<div class="card">
-<h2>TVOC</h2>
-<div id="tvocNow1" class="value">--</div>
-</div>
-
-</div>
-
-<div class="chart-container">
-<h2>Temperature (24 Hours)</h2>
-<canvas id="tempChart1"></canvas>
-</div>
-
-<div class="chart-container">
-<h2>Humidity (24 Hours)</h2>
-<canvas id="humChart1"></canvas>
-</div>
-
-<div class="chart-container">
-<h2>LDR (24 Hours)</h2>
-<canvas id="ldrChart1"></canvas>
-</div>
-
-<div class="chart-container">
-<h2>TVOC (24 Hours)</h2>
-<canvas id="tvocChart1"></canvas>
-</div>
-
-</div>
-
-<!-- ========================================================= -->
-
-<!-- SECOND WEATHER STATION                                    -->
-
+<!-- WEATHER STATION                                           -->
 <!-- ========================================================= -->
 
 <div class="station">
 
-<h2 class="station-title">Weather Station 2</h2>
+<h2 class="station-title">Weather Station</h2>
+
 
 <div class="cards">
 
+
 <div class="card">
+
 <h2>Temperature</h2>
-<div id="tempNow2" class="value">--</div>
+
+<div id="tempNow" class="value">--</div>
+
 </div>
 
+
 <div class="card">
+
 <h2>Humidity</h2>
-<div id="humNow2" class="value">--</div>
+
+<div id="humNow" class="value">--</div>
+
 </div>
 
+
 <div class="card">
+
 <h2>Pressure</h2>
-<div id="pressureNow2" class="value">--</div>
+
+<div id="pressureNow" class="value">--</div>
+
 </div>
+
 
 <div class="card">
-<h2>Resistance</h2>
-<div id="resistanceNow2" class="value">--</div>
+
+<h2>BME680 Gas Resistance</h2>
+
+<div id="resistanceNow" class="value">--</div>
+
 </div>
+
 
 <div class="card">
-<h2>AGS10 TVOC</h2>
-<div id="ags10Now2" class="value">--</div>
-</div>
+
+<h2>SGP40 TVOC</h2>
+
+<div id="sgp40Now" class="value">--</div>
 
 </div>
+
+
+</div>
+
 
 <div class="chart-container">
+
 <h2>Temperature (24 Hours)</h2>
-<canvas id="tempChart2"></canvas>
+
+<canvas id="tempChart"></canvas>
+
 </div>
 
+
 <div class="chart-container">
+
 <h2>Humidity (24 Hours)</h2>
-<canvas id="humChart2"></canvas>
+
+<canvas id="humChart"></canvas>
+
 </div>
 
+
 <div class="chart-container">
+
 <h2>Pressure (24 Hours)</h2>
-<canvas id="pressureChart2"></canvas>
+
+<canvas id="pressureChart"></canvas>
+
 </div>
+
 
 <div class="chart-container">
-<h2>Resistance (24 Hours)</h2>
-<canvas id="resistanceChart2"></canvas>
+
+<h2>BME680 Gas Resistance (24 Hours)</h2>
+
+<canvas id="resistanceChart"></canvas>
+
 </div>
+
 
 <div class="chart-container">
-<h2>AGS10 TVOC (24 Hours)</h2>
-<canvas id="ags10Chart2"></canvas>
-</div>
+
+<h2>SGP40 TVOC (24 Hours)</h2>
+
+<canvas id="sgp40Chart"></canvas>
 
 </div>
 
+
 </div>
+
+
+</div>
+
 
 <div class="footer">
+
 FritzenLab Weather Stations
+
 </div>
+
+
 
 <script type="module">
 
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+import { initializeApp }
+
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
 
 import {
-    getDatabase,
-    ref,
-    get,
-    query,
-    orderByKey,
-    startAt
+
+getDatabase,
+ref,
+get,
+query,
+orderByKey,
+startAt
+
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
 
+
+/* ========================================================= */
+/* FIREBASE CONFIGURATION                                    */
+/* ========================================================= */
+
 const firebaseConfig = {
-    apiKey: "AIzaSyD7lwDV-wizSDwlHR7ye2g_NlOgVMmdzW4",
-    authDomain: "fritzenlabweather.firebaseapp.com",
-    databaseURL: "https://fritzenlabweather-default-rtdb.firebaseio.com",
-    projectId: "fritzenlabweather",
-    storageBucket: "fritzenlabweather.firebasestorage.app",
-    messagingSenderId: "663871098858",
-    appId: "1:663871098858:web:6baf040a18e1733c3dac93",
-    measurementId: "G-ENSMBE7RK4"
+
+apiKey: "AIzaSyD7lwDV-wizSDwlHR7ye2g_NlOgVMmdzW4",
+
+authDomain: "fritzenlabweather.firebaseapp.com",
+
+databaseURL: "https://fritzenlabweather-default-rtdb.firebaseio.com",
+
+projectId: "fritzenlabweather",
+
+storageBucket: "fritzenlabweather.firebasestorage.app",
+
+messagingSenderId: "663871098858",
+
+appId: "1:663871098858:web:6baf040a18e1733c3dac93",
+
+measurementId: "G-ENSMBE7RK4"
+
 };
 
 
+
 const app = initializeApp(firebaseConfig);
+
 const db = getDatabase(app);
 
 
+
 /* ========================================================= */
-/* CHART VARIABLES                                            */
+/* CHART VARIABLES                                           */
 /* ========================================================= */
 
-let tempChart1;
-let humChart1;
-let ldrChart1;
-let tvocChart1;
+let tempChart;
 
-let tempChart2;
-let humChart2;
-let pressureChart2;
-let resistanceChart2;
-let ags10Chart2;
+let humChart;
+
+let pressureChart;
+
+let resistanceChart;
+
+let sgp40Chart;
+
 
 
 /* ========================================================= */
@@ -276,373 +303,436 @@ let ags10Chart2;
 /* ========================================================= */
 
 function createChart(canvasId,label,data,labels)
+
 {
-    const ctx = document.getElementById(canvasId);
 
-    return new Chart(ctx,{
-        type:'line',
+const ctx = document.getElementById(canvasId);
 
-        data:{
-            labels:labels,
 
-            datasets:[{
-                label:label,
-                data:data,
-                tension:0.25,
-                fill:false
-            }]
-        },
+return new Chart(ctx,{
 
-        options:{
-            responsive:true,
-            maintainAspectRatio:false,
+type:'line',
 
-            scales:{
-                x:{
-                    ticks:{
-                        maxTicksLimit:10
-                    }
-                }
-            }
-        }
-    });
+
+data:{
+
+labels:labels,
+
+
+datasets:[{
+
+label:label,
+
+data:data,
+
+tension:0.25,
+
+fill:false
+
+}]
+
+},
+
+
+options:{
+
+responsive:true,
+
+maintainAspectRatio:false,
+
+
+scales:{
+
+x:{
+
+ticks:{
+
+maxTicksLimit:10
+
+}
+
+}
+
+}
+
+}
+
+});
+
 }
 
 
+
 /* ========================================================= */
-/* WEATHER STATION 1                                          */
+/* LOAD WEATHER DATA                                         */
 /* Firebase path: /weather                                  */
 /* ========================================================= */
 
-async function loadWeather1()
-{
-    try{
-
-        const now = Math.floor(Date.now() / 1000);
-
-        const cutoff48h = now - (48 * 60 * 60);
-
-        const weatherQuery = query(
-            ref(db,'weather'),
-            orderByKey(),
-            startAt(String(cutoff48h))
-        );
-
-        const snapshot = await get(weatherQuery);
-
-        if(!snapshot.exists())
-        {
-            console.log("No data from Weather Station 1");
-            return;
-        }
-
-        const data = snapshot.val();
-
-        const cutoff = now - (24 * 60 * 60);
-
-        let rows = [];
-
-        Object.keys(data).forEach(key => {
-
-            const item = data[key];
-
-            if(item.timestamp >= cutoff)
-            {
-                rows.push(item);
-            }
-
-        });
-
-        rows.sort((a,b) => a.timestamp - b.timestamp);
-
-        if(rows.length === 0)
-            return;
-
-        const latest = rows[rows.length - 1];
-        console.log("Station 2 updated:", new Date(latest.timestamp * 1000).toLocaleString());
-
-        /* Current values */
-
-        document.getElementById("tempNow1").innerHTML =
-            latest.temp.toFixed(1) + " °C";
-
-        document.getElementById("humNow1").innerHTML =
-            latest.hum.toFixed(1) + " %";
-
-        document.getElementById("ldrNow1").innerHTML =
-            latest.ldr.toFixed(1) + " %";
-
-        document.getElementById("tvocNow1").innerHTML =
-            latest.tvoc.toFixed(0);
-
-
-        document.getElementById("lastUpdate").innerHTML =
-            "Station 1 last update: " +
-            new Date(latest.timestamp * 1000).toLocaleString();
-
-
-        /* Chart data */
-
-        const labels = [];
-        const tempData = [];
-        const humData = [];
-        const ldrData = [];
-        const tvocData = [];
-
-
-        rows.forEach(r => {
-
-            labels.push(
-                new Date(r.timestamp * 1000)
-                .toLocaleTimeString([],{
-                    hour:'2-digit',
-                    minute:'2-digit'
-                })
-            );
-
-            tempData.push(r.temp);
-            humData.push(r.hum);
-            ldrData.push(r.ldr);
-            tvocData.push(r.tvoc);
-
-        });
-
-
-        /* Destroy old charts */
-
-        if(tempChart1) tempChart1.destroy();
-        if(humChart1) humChart1.destroy();
-        if(ldrChart1) ldrChart1.destroy();
-        if(tvocChart1) tvocChart1.destroy();
-
-
-        /* Create charts */
-
-        tempChart1 =
-            createChart(
-                "tempChart1",
-                "Temperature °C",
-                tempData,
-                labels
-            );
-
-        humChart1 =
-            createChart(
-                "humChart1",
-                "Humidity %",
-                humData,
-                labels
-            );
-
-        ldrChart1 =
-            createChart(
-                "ldrChart1",
-                "LDR %",
-                ldrData,
-                labels
-            );
-
-        tvocChart1 =
-            createChart(
-                "tvocChart1",
-                "TVOC",
-                tvocData,
-                labels
-            );
-
-    }
-    catch(err)
-    {
-        console.error("Weather Station 1 error:", err);
-    }
-}
-
-
-/* ========================================================= */
-/* WEATHER STATION 2                                          */
-/* Firebase path: /weather2                                 */
-/* ========================================================= */
-
-async function loadWeather2()
-{
-    try{
-
-        const now = Math.floor(Date.now() / 1000);
-
-        const cutoff48h = now - (48 * 60 * 60);
-
-        const weatherQuery = query(
-            ref(db,'weather2'),
-            orderByKey(),
-            startAt(String(cutoff48h))
-        );
-
-        const snapshot = await get(weatherQuery);
-
-        if(!snapshot.exists())
-        {
-            console.log("No data from Weather Station 2");
-            return;
-        }
-
-        const data = snapshot.val();
-
-        const cutoff = now - (24 * 60 * 60);
-
-        let rows = [];
-
-        Object.keys(data).forEach(key => {
-
-            const item = data[key];
-
-            if(item.timestamp >= cutoff)
-            {
-                rows.push(item);
-            }
-
-        });
-
-        rows.sort((a,b) => a.timestamp - b.timestamp);
-
-        if(rows.length === 0)
-            return;
-
-        const latest = rows[rows.length - 1];
-
-
-        /* Current values */
-
-        document.getElementById("tempNow2").innerHTML =
-            latest.temp.toFixed(1) + " °C";
-
-        document.getElementById("humNow2").innerHTML =
-            latest.hum.toFixed(1) + " %";
-
-        document.getElementById("pressureNow2").innerHTML =
-            latest.pressure.toFixed(1) + " hPa";
-
-        document.getElementById("resistanceNow2").innerHTML =
-            latest["bme680 resist"].toFixed(0) + " Ohm";
-
-        document.getElementById("ags10Now2").innerHTML =
-            latest["tvoc ags10"].toFixed(0) + " ppb";
-
-
-        /* Chart data */
-
-        const labels = [];
-        const tempData = [];
-        const humData = [];
-        const pressureData = [];
-        const bme680Data = [];
-        const ags10Data = [];
-
-
-        rows.forEach(r => {
-
-            labels.push(
-                new Date(r.timestamp * 1000)
-                .toLocaleTimeString([],{
-                    hour:'2-digit',
-                    minute:'2-digit'
-                })
-            );
-
-            tempData.push(r.temp);
-            humData.push(r.hum);
-            pressureData.push(r.pressure);
-            bme680Data.push(r["bme680 resist"]);
-            ags10Data.push(r["tvoc ags10"]);
-
-        });
-
-
-        /* Destroy old charts */
-
-        if(tempChart2) tempChart2.destroy();
-        if(humChart2) humChart2.destroy();
-        if(pressureChart2) pressureChart2.destroy();
-        if(resistanceChart2) resistanceChart2.destroy();
-        if(ags10Chart2) ags10Chart2.destroy();
-
-
-        /* Create charts */
-
-        tempChart2 =
-            createChart(
-                "tempChart2",
-                "Temperature °C",
-                tempData,
-                labels
-            );
-
-        humChart2 =
-            createChart(
-                "humChart2",
-                "Humidity %",
-                humData,
-                labels
-            );
-
-        pressureChart2 =
-            createChart(
-                "pressureChart2",
-                "Pressure hPa",
-                pressureData,
-                labels
-            );
-
-        resistanceChart2 =
-            createChart(
-                "resistanceChart2",
-                "BME680 air quality",
-                bme680Data,
-                labels
-            );
-
-        ags10Chart2 =
-            createChart(
-                "ags10Chart2",
-                "AGS10 TVOC ppb",
-                ags10Data,
-                labels
-            );
-
-
-    }
-    catch(err)
-    {
-        console.error("Weather Station 2 error:", err);
-    }
-}
-
-
-/* ========================================================= */
-/* LOAD BOTH STATIONS                                         */
-/* ========================================================= */
-
 async function loadWeather()
+
 {
-    await Promise.all([
-        loadWeather1(),
-        loadWeather2()
-    ]);
+
+try{
+
+
+/* Current Unix timestamp */
+
+const now = Math.floor(Date.now() / 1000);
+
+
+/* Get enough data to cover the requested 24-hour period */
+
+const cutoff48h = now - (48 * 60 * 60);
+
+
+const weatherQuery = query(
+
+ref(db,'weather'),
+
+orderByKey(),
+
+startAt(String(cutoff48h))
+
+);
+
+
+const snapshot = await get(weatherQuery);
+
+
+if(!snapshot.exists())
+
+{
+
+console.log("No weather data found.");
+
+return;
+
 }
 
 
-/* Initial load */
+const data = snapshot.val();
+
+
+/* Only use the last 24 hours for the charts */
+
+const cutoff = now - (24 * 60 * 60);
+
+
+let rows = [];
+
+
+Object.keys(data).forEach(key => {
+
+
+const item = data[key];
+
+
+if(item && item.timestamp >= cutoff)
+
+{
+
+rows.push(item);
+
+}
+
+
+});
+
+
+/* Sort oldest → newest */
+
+rows.sort((a,b) => a.timestamp - b.timestamp);
+
+
+if(rows.length === 0)
+
+{
+
+console.log("No data from the last 24 hours.");
+
+return;
+
+}
+
+
+/* ========================================================= */
+/* LATEST READING                                            */
+/* ========================================================= */
+
+const latest = rows[rows.length - 1];
+
+
+console.log(
+
+"Weather station updated:",
+
+new Date(latest.timestamp * 1000).toLocaleString()
+
+);
+
+
+
+/* ========================================================= */
+/* CURRENT VALUES                                            */
+/* ========================================================= */
+
+document.getElementById("tempNow").innerHTML =
+
+Number(latest.temp).toFixed(1) + " °C";
+
+
+document.getElementById("humNow").innerHTML =
+
+Number(latest.hum).toFixed(1) + " %";
+
+
+document.getElementById("pressureNow").innerHTML =
+
+Number(latest.pressure).toFixed(1) + " hPa";
+
+
+document.getElementById("resistanceNow").innerHTML =
+
+Number(latest["bme680 resist"]).toFixed(0) + " Ω";
+
+
+document.getElementById("sgp40Now").innerHTML =
+
+Number(latest["tvoc sgp40"]).toFixed(0) + " ppb";
+
+
+
+/* ========================================================= */
+/* LAST UPDATE                                               */
+/* ========================================================= */
+
+document.getElementById("lastUpdate").innerHTML =
+
+"Last update: " +
+
+new Date(latest.timestamp * 1000).toLocaleString();
+
+
+
+/* ========================================================= */
+/* CHART DATA                                                */
+/* ========================================================= */
+
+const labels = [];
+
+const tempData = [];
+
+const humData = [];
+
+const pressureData = [];
+
+const resistanceData = [];
+
+const sgp40Data = [];
+
+
+
+rows.forEach(r => {
+
+
+labels.push(
+
+new Date(r.timestamp * 1000)
+
+.toLocaleTimeString([],{
+
+hour:'2-digit',
+
+minute:'2-digit'
+
+})
+
+);
+
+
+tempData.push(Number(r.temp));
+
+humData.push(Number(r.hum));
+
+pressureData.push(Number(r.pressure));
+
+resistanceData.push(Number(r["bme680 resist"]));
+
+sgp40Data.push(Number(r["tvoc sgp40"]));
+
+
+});
+
+
+
+/* ========================================================= */
+/* DESTROY OLD CHARTS                                        */
+/* ========================================================= */
+
+if(tempChart)
+
+tempChart.destroy();
+
+
+if(humChart)
+
+humChart.destroy();
+
+
+if(pressureChart)
+
+pressureChart.destroy();
+
+
+if(resistanceChart)
+
+resistanceChart.destroy();
+
+
+if(sgp40Chart)
+
+sgp40Chart.destroy();
+
+
+
+/* ========================================================= */
+/* CREATE CHARTS                                             */
+/* ========================================================= */
+
+tempChart =
+
+createChart(
+
+"tempChart",
+
+"Temperature °C",
+
+tempData,
+
+labels
+
+);
+
+
+
+humChart =
+
+createChart(
+
+"humChart",
+
+"Humidity %",
+
+humData,
+
+labels
+
+);
+
+
+
+pressureChart =
+
+createChart(
+
+"pressureChart",
+
+"Pressure hPa",
+
+pressureData,
+
+labels
+
+);
+
+
+
+resistanceChart =
+
+createChart(
+
+"resistanceChart",
+
+"BME680 Gas Resistance Ω",
+
+resistanceData,
+
+labels
+
+);
+
+
+
+sgp40Chart =
+
+createChart(
+
+"sgp40Chart",
+
+"SGP40 TVOC ppb",
+
+sgp40Data,
+
+labels
+
+);
+
+
+}
+
+catch(err)
+
+{
+
+console.error(
+
+"Weather station error:",
+
+err
+
+);
+
+}
+
+}
+
+
+
+/* ========================================================= */
+/* INITIAL LOAD                                              */
+/* ========================================================= */
 
 loadWeather();
 
 
-/* Update every 5 minutes */
+
+/* ========================================================= */
+/* UPDATE EVERY 5 MINUTES                                    */
+/* ========================================================= */
 
 setInterval(() => {
-    console.log("Automatic update:", new Date().toLocaleString());
-    loadWeather();
-}, 300000);
+
+
+console.log(
+
+"Automatic update:",
+
+new Date().toLocaleString()
+
+);
+
+
+loadWeather();
+
+
+},300000);
+
+
 
 </script>
 
+
 </body>
+
 </html>
+```
