@@ -359,7 +359,7 @@ async function loadWeather1()
             return;
 
         const latest = rows[rows.length - 1];
-
+        console.log("Station 2 updated:", new Date(latest.timestamp * 1000).toLocaleString());
 
         /* Current values */
 
@@ -637,7 +637,10 @@ loadWeather();
 
 /* Update every 5 minutes */
 
-setInterval(loadWeather,300000);
+setInterval(() => {
+    console.log("Automatic update:", new Date().toLocaleString());
+    loadWeather();
+}, 300000);
 
 </script>
 
