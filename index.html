@@ -522,7 +522,7 @@ async function loadWeather2()
             latest.pressure.toFixed(1) + " hPa";
 
         document.getElementById("resistanceNow2").innerHTML =
-            latest["BME680 resist"].toFixed(0) + " Ohm";
+            latest["bme680 resist"].toFixed(0) + " Ohm";
 
         document.getElementById("ags10Now2").innerHTML =
             latest["tvoc ags10"].toFixed(0) + " ppb";
@@ -551,7 +551,7 @@ async function loadWeather2()
             tempData.push(r.temp);
             humData.push(r.hum);
             pressureData.push(r.pressure);
-            bme680Data.push(r["BME680 resist"]);
+            bme680Data.push(r["bme680 resist"]);
             ags10Data.push(r["tvoc ags10"]);
 
         });
