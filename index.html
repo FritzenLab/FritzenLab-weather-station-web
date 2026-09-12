@@ -151,6 +151,15 @@ canvas{
 
 <div class="card">
 
+<h2>LDR</h2>
+
+<div id="ldrNow" class="value">--</div>
+
+</div>
+
+
+<div class="card">
+
 <h2>BME680 Gas Resistance</h2>
 
 <div id="resistanceNow" class="value">--</div>
@@ -199,6 +208,15 @@ canvas{
 
 <div class="chart-container">
 
+<h2>LDR (24 Hours)</h2>
+
+<canvas id="ldrChart"></canvas>
+
+</div>
+
+
+<div class="chart-container">
+
 <h2>BME680 Gas Resistance (24 Hours)</h2>
 
 <canvas id="resistanceChart"></canvas>
@@ -232,9 +250,7 @@ FritzenLab Weather Stations
 <script type="module">
 
 
-import { initializeApp }
-
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 
 
 import {
@@ -291,6 +307,8 @@ let tempChart;
 let humChart;
 
 let pressureChart;
+
+let ldrChart;
 
 let resistanceChart;
 
@@ -365,7 +383,7 @@ maxTicksLimit:10
 
 /* ========================================================= */
 /* LOAD WEATHER DATA                                         */
-/* Firebase path: /weather                                  */
+/* Firebase path: /weather                                   */
 /* ========================================================= */
 
 async function loadWeather()
@@ -491,6 +509,11 @@ document.getElementById("pressureNow").innerHTML =
 Number(latest.pressure).toFixed(1) + " hPa";
 
 
+document.getElementById("ldrNow").innerHTML =
+
+Number(latest.ldr).toFixed(1) + " %";
+
+
 document.getElementById("resistanceNow").innerHTML =
 
 Number(latest["bme680 resist"]).toFixed(0) + " Ω";
@@ -526,6 +549,8 @@ const humData = [];
 
 const pressureData = [];
 
+const ldrData = [];
+
 const resistanceData = [];
 
 const sgp40Data = [];
@@ -556,6 +581,8 @@ humData.push(Number(r.hum));
 
 pressureData.push(Number(r.pressure));
 
+ldrData.push(Number(r.ldr));
+
 resistanceData.push(Number(r["bme680 resist"]));
 
 sgp40Data.push(Number(r["tvoc sgp40"]));
@@ -582,6 +609,11 @@ humChart.destroy();
 if(pressureChart)
 
 pressureChart.destroy();
+
+
+if(ldrChart)
+
+ldrChart.destroy();
 
 
 if(resistanceChart)
@@ -640,6 +672,22 @@ createChart(
 "Pressure hPa",
 
 pressureData,
+
+labels
+
+);
+
+
+
+ldrChart =
+
+createChart(
+
+"ldrChart",
+
+"LDR %",
+
+ldrData,
 
 labels
 
