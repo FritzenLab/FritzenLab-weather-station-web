@@ -159,9 +159,9 @@ canvas{
 
 <div class="card">
 
-<h2>BME680 Gas Resistance</h2>
+<h2>Air quality score AQI</h2>
 
-<div id="resistanceNow" class="value">--</div>
+<div id="aqiNow" class="value">--</div>
 
 </div>
 
@@ -216,9 +216,9 @@ canvas{
 
 <div class="chart-container">
 
-<h2>BME680 Gas Resistance (24 Hours)</h2>
+<h2>Air quality score AQI (24 Hours)</h2>
 
-<canvas id="resistanceChart"></canvas>
+<canvas id="aqiChart"></canvas>
 
 </div>
 
@@ -309,7 +309,7 @@ let pressureChart;
 
 let ldrChart;
 
-let resistanceChart;
+let aqiChart;
 
 let sgp40Chart;
 
@@ -513,9 +513,9 @@ document.getElementById("ldrNow").innerHTML =
 Number(latest.ldr).toFixed(1) + " %";
 
 
-document.getElementById("resistanceNow").innerHTML =
+document.getElementById("aqiNow").innerHTML =
 
-Number(latest["bme680 resist"]).toFixed(0) + " Ω";
+Number(latest.aqi).toFixed(0);
 
 
 document.getElementById("sgp40Now").innerHTML =
@@ -550,7 +550,7 @@ const pressureData = [];
 
 const ldrData = [];
 
-const resistanceData = [];
+const aqiData = [];
 
 const sgp40Data = [];
 
@@ -582,7 +582,7 @@ pressureData.push(Number(r.pressure));
 
 ldrData.push(Number(r.ldr));
 
-resistanceData.push(Number(r["bme680 resist"]));
+aqiData.push(Number(r.aqi));
 
 sgp40Data.push(Number(r["tvoc sgp40"]));
 
@@ -615,9 +615,9 @@ if(ldrChart)
 ldrChart.destroy();
 
 
-if(resistanceChart)
+if(aqiChart)
 
-resistanceChart.destroy();
+aqiChart.destroy();
 
 
 if(sgp40Chart)
@@ -694,15 +694,15 @@ labels
 
 
 
-resistanceChart =
+aqiChart =
 
 createChart(
 
-"resistanceChart",
+"aqiChart",
 
-"BME680 Gas Resistance Ω",
+"Air quality score AQI",
 
-resistanceData,
+aqiData,
 
 labels
 
