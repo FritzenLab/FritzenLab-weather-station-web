@@ -150,27 +150,25 @@ canvas{
 
 <div class="card">
 
-<h2>LUX</h2>
+<h2>Light (Lux)</h2>
 
 <div id="vemlNow" class="value">--</div>
 
 </div>
-
-
-<div class="card">
-
-<h2>Air quality score AQI</h2>
-
-<div id="aqiNow" class="value">--</div>
-
-</div>
-
 
 <div class="card">
 
 <h2>SGP40 TVOC</h2>
 
 <div id="sgp40Now" class="value">--</div>
+
+</div>
+
+<div class="card">
+
+<h2>Air quality score AQI</h2>
+
+<div id="aqiNow" class="value">--</div>
 
 </div>
 
@@ -207,21 +205,11 @@ canvas{
 
 <div class="chart-container">
 
-<h2>LUX (24 Hours)</h2>
+<h2>Light level (Lux) (24 Hours)</h2>
 
 <canvas id="vemlChart"></canvas>
 
 </div>
-
-
-<div class="chart-container">
-
-<h2>Air quality score AQI (24 Hours)</h2>
-
-<canvas id="aqiChart"></canvas>
-
-</div>
-
 
 <div class="chart-container">
 
@@ -231,6 +219,13 @@ canvas{
 
 </div>
 
+<div class="chart-container">
+
+<h2>Air quality score AQI (24 Hours)</h2>
+
+<canvas id="aqiChart"></canvas>
+
+</div>
 
 </div>
 
@@ -694,22 +689,6 @@ labels
 
 
 
-aqiChart =
-
-createChart(
-
-"aqiChart",
-
-"Air quality score AQI",
-
-aqiData,
-
-labels
-
-);
-
-
-
 sgp40Chart =
 
 createChart(
@@ -724,6 +703,19 @@ labels
 
 );
 
+aqiChart =
+
+createChart(
+
+"aqiChart",
+
+"Air quality score AQI",
+
+aqiData,
+
+labels
+
+);
 
 }
 
