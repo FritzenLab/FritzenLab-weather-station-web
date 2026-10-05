@@ -152,7 +152,7 @@ canvas{
 
 <h2>Light (Lux)</h2>
 
-<div id="vemlNow" class="value">--</div>
+<div id="bh1750Now" class="value">--</div>
 
 </div>
 
@@ -207,7 +207,7 @@ canvas{
 
 <h2>Light level (Lux) (24 Hours)</h2>
 
-<canvas id="vemlChart"></canvas>
+<canvas id="bh1750Chart"></canvas>
 
 </div>
 
@@ -302,7 +302,7 @@ let humChart;
 
 let pressureChart;
 
-let vemlChart;
+let bh1750Chart;
 
 let aqiChart;
 
@@ -503,9 +503,9 @@ document.getElementById("pressureNow").innerHTML =
 Number(latest.pressure).toFixed(1) + " hPa";
 
 
-document.getElementById("vemlNow").innerHTML =
+document.getElementById("bh1750Now").innerHTML =
 
-Number(latest.veml).toFixed(1) + " Lux";
+Number(latest.bh1750).toFixed(1) + " Lux";
 
 
 document.getElementById("aqiNow").innerHTML =
@@ -543,7 +543,7 @@ const humData = [];
 
 const pressureData = [];
 
-const vemlData = [];
+const bh1750Data = [];
 
 const aqiData = [];
 
@@ -575,7 +575,7 @@ humData.push(Number(r.hum));
 
 pressureData.push(Number(r.pressure));
 
-vemlData.push(Number(r.veml));
+bh1750Data.push(Number(r.bh1750));
 
 aqiData.push(Number(r.aqi));
 
@@ -605,9 +605,9 @@ if(pressureChart)
 pressureChart.destroy();
 
 
-if(vemlChart)
+if(bh1750Chart)
 
-vemlChart.destroy();
+bh1750Chart.destroy();
 
 
 if(aqiChart)
@@ -673,15 +673,15 @@ labels
 
 
 
-vemlChart =
+bh1750Chart =
 
 createChart(
 
-"vemlChart",
+"bh1750Chart",
 
-"VEML LUX",
+"BH1750 LUX",
 
-vemlData,
+bh1750Data,
 
 labels
 
